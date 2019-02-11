@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Banco de Mexico Total Outstanding Debt - <span id="asOf"></span></h1>
+
+  <div class="slidecontainer">
+    <input type="range" min="1" max="1000" value="1000"
+	   style="
+		  width: 1000px;
+		  margin-right: 50px;
+		  margin-left: 100px;"
+	   class="slider" id="myRange">
+  </div>
+  <div id="myGrid" style="height: 300px;width:1200px;" class="ag-theme-balham"></div>
+
+  <script type="text/javascript" charset="utf-8">
+
+    var dateSeries;
+    
+    function formatNumber(cell) {
+	if (cell && cell.value) {
+	    return cell.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	}
+	return 
+    }
+
+    
+    var columnDefs = [
+	{headerName: "Instrument", field: "instrument_type", rowGroup: true, enableRowGroupyes
+	 : true, filter: 'agTextColumnFilter'},
+	{headerName: "Sector", field: "short_name", pivot: true, enablePivot:true,
+	 filter: 'agTextColumnFilter'},
+	{
+	    headerName: "Date",
+	    field: "date",
+	    cellRenderer: (data) => {
+		return data.value ? (new Date(data.value)).toLocaleDateString() : '';
+	    },
+	    filter: 'agTextColumnFilter'
+	},
+	{
+	    headerName: "Mex$ '000",
+	    field: "value",
+	    aggFunc: 'last',
+	    valueFormatter: formatNumber,
+	    cellClass: 'number-cell',
+	    cellStyle: {textAlign: 'right'},
+	    filter: 'agNumberColumnFilter',
+	},
+    ];
+
+    
+    var gridOptions = {
+	columnDefs: columnDefs,
+	pivotMode: true,
+	defaultColDef: {
+	    filter: true,
+	    sortable: true,
+	    width: 160,
+	},
+	animateRows: true,
+    };
+
+    var slider = document.getElementById("myRange");
+
+    slider.oninput = function() {
+	var targetDateIndex = Math.floor((dateSeries.length-1) * this.value / 1000)
+	var targetDate = dateSeries[targetDateIndex];
+	gridOptions.api.setFilterModel({
+	     date: {
+	 	filter: targetDate,
+	 	type: "equals",
+	     }
+	 });
+	var elem=document.getElementById("asOf")
+	elem.innerHTML = targetDate.slice(0,10)
+	gridOptions.api.onFilterChanged();
+    }
+
+  document.addEventListener('DOMContentLoaded', function() {
+      var eGridDiv = document.querySelector('#myGrid');
+      new agGrid.Grid(eGridDiv, gridOptions);
+  
+      fetch('db/db.json').then(function(response) {
+	  return response.json();
+      }).then(function(data) {
+	  gridOptions.api.setRowData(data);
+	  dateSeries = data
+	      .map(function(x){return x['date']})
+	      .filter((v, i, a) => a.indexOf(v) === i)
+	      .sort();
+	  slider.value = 998;
+	  slider.oninput();
+	  return dateSeries;
+      })
+  })
+  </script>
+</body>
+</html>

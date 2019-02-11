@@ -1,0 +1,7 @@
+venv
+*~
+*#
+db/db.*.json
+__pycache__
+*\*
+todo.org
