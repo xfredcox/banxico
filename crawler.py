@@ -1,6 +1,7 @@
 import datetime as dt
 import json
 import logging
+import pandas as pd
 import requests
 import sys
 import os.path
@@ -115,12 +116,16 @@ def main():
     # Updating db.json to reflect the latest data.
     # TODO: implement this as a symlink. Keeping it as a separate copy for now on the off
     # chance this gets run on Windows.
-    filepath = os.path.join(DESTINATION_DIR, "db.json")
+    filepath = get_latest_path()
     log.info("Saving to file: %s", filepath)
     with open(filepath, 'w') as f:
         f.write(output)
         
     log.info("Crawl Completed")    
+
+
+def get_latest_path():
+    return os.path.join(DESTINATION_DIR, "db.json")
 
 
 if __name__ == "__main__":
