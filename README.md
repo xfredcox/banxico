@@ -4,33 +4,33 @@
 
 Library dependencies are listed in requirements.txt.
 
-``bash
+```bash
 python3.6 -m venv venv;
 pip install --upgrade pip;
 pip install -r requirements.txt;
 source venv/bin/activate; # or Windows equivalent
-``
+```
 
 ## Running the UI Locally
 
 The UI is a Plotly/Dash app. With the venv properly activated, run:
 
-``bash
+```bash
 python ui.py
-``
+```
 
 ## Running the Crawler locally
 
 The crawler script updates the ./db directory with the results of the latest run. With the venv properly activated, run:
 
-``bash
+```bash
 python crawler.py
-``
+```
 
 ## Running unittest locally
 
 With the venv properly activated, run:
 
-``bash
+```bash
 nosetests
-``
+```
