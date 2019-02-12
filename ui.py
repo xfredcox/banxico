@@ -51,9 +51,8 @@ def _figure_from_df(df, select_enabled=False, title='', height=None):
         },
     }
 
-external_stylesheets = []#['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__)
+app.title = "Banxico"
 
 app.layout = html.Div(children=[
     html.H1(children='Banxico Total Outstanding Debt', style=dict(textAlign='center')),

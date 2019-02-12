@@ -7,7 +7,6 @@ import sys
 import os.path
 
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG) # TODO: Remove
 log = logging.getLogger(__name__)
 
 DESTINATION_DIR = './db'
@@ -90,6 +89,27 @@ def parse_records(json_resp):
 
     return records
 
+
+def get_latest_path():
+    return os.path.join(DESTINATION_DIR, "db.json")
+
+
+def save_crawl_data(output, run_id):
+    filename = "db.%s.json" % run_id
+    filepath = os.path.join(DESTINATION_DIR, filename)
+    log.info("Saving to file: %s", filepath)
+    
+    with open(filepath, 'w') as f:
+        f.write(output)
+
+    # Updating db.json to reflect the latest data.
+    # TODO: implement this as a symlink. Keeping it as a separate copy for now on the off
+    # chance this gets run on Windows.
+    filepath = get_latest_path()
+    log.info("Saving to file: %s", filepath)
+    with open(filepath, 'w') as f:
+        f.write(output)
+
         
 def main():
     run_timestamp = dt.datetime.now().isoformat()
@@ -106,26 +126,9 @@ def main():
     log.debug("Converting to JSON string")        
     output = json.dumps(records)
 
-    filename = "db.%s.json" % run_timestamp
-    filepath = os.path.join(DESTINATION_DIR, filename)
-    log.info("Saving to file: %s", filepath)
-    
-    with open(filepath, 'w') as f:
-        f.write(output)
-
-    # Updating db.json to reflect the latest data.
-    # TODO: implement this as a symlink. Keeping it as a separate copy for now on the off
-    # chance this gets run on Windows.
-    filepath = get_latest_path()
-    log.info("Saving to file: %s", filepath)
-    with open(filepath, 'w') as f:
-        f.write(output)
+    save_crawl_data(output, run_timestamp)
         
     log.info("Crawl Completed")    
-
-
-def get_latest_path():
-    return os.path.join(DESTINATION_DIR, "db.json")
 
 
 if __name__ == "__main__":
