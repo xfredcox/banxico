@@ -4,6 +4,8 @@
 
 http://banxico.atompaper.com
 
+![Demo](/demo.png)
+
 ## Setting up a Python environment to run scripts
 
 Library dependencies are listed in requirements.txt.
@@ -20,7 +22,7 @@ source venv/bin/activate; # or Windows equivalent
 The UI is a Plotly/Dash app. With the venv properly activated, run:
 
 ```bash
-python ui.py
+python application.py
 ```
 
 ## Running the Crawler locally

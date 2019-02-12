@@ -5,3 +5,7 @@ db/db.*.json
 __pycache__
 *\*
 todo.org
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

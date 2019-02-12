@@ -101,6 +101,9 @@ def drilldown_instrument(evt):
         height=SECTOR_CHART_HEIGHT,        
     )
 
+# WSGI
+application = app.server
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+    
