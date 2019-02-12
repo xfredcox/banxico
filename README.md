@@ -5,13 +5,10 @@
 Library dependencies are listed in requirements.txt.
 
 ``bash
-python3.6 -m venv venv
-
-pip install --upgrade pip
-
-pip install -r requirements.txt
-
-source venv/bin/activate  # or Windows equivalent
+python3.6 -m venv venv;
+pip install --upgrade pip;
+pip install -r requirements.txt;
+source venv/bin/activate; # or Windows equivalent
 ``
 
 ## Running the UI Locally
